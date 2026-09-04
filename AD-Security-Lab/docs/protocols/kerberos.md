@@ -11,7 +11,10 @@ Default authentication protocol in AD since Windows 2000. It allows a user to pr
 
 ## How it works
 
+     
+  ![Flux d'authentification Kerberos](images/kerberos_authentication_flow.svg)
 
+  
 1. **Pre-authentication** — the client encrypts a timestamp with its NTLM hash to prove it knows the password.
 2. **AS-REQ → AS-REP** — the client requests a TGT (Ticket Granting Ticket) from the AS; the KDC replies with a TGT encrypted with the krbtgt key, containing a session key and an expiration time.
 3. **TGS-REQ → TGS-REP** — the client presents its TGT + the SPN of the desired service to the TGS; it receives a service ticket (TGS) encrypted with the service account's hash.
