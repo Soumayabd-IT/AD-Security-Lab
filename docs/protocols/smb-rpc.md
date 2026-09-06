@@ -6,7 +6,7 @@
 ## Key definitions
 - **Port 445**: SMB directly over TCP (modern method, since Windows 2000).
 - **Port 139**: SMB over NetBIOS (legacy method, still present for compatibility).
-- **Port 135**: RPC Endpoint Mapper — answers "which port is the requested service running on?".
+- **Port 135**: RPC Endpoint Mapper answers "which port is the requested service running on?".
 - **Dynamic port (49152–65535)**: range where the actual RPC service responds, once negotiated via port 135.
 - **Named pipe**: a communication channel that lets RPC calls travel directly over an SMB connection, without going through a dedicated RPC port.
 - **Administrative share**: hidden share created automatically (`C$`, `ADMIN$`, `IPC$`) — invisible in network browsing because its name ends with `$`, but accessible with the right permissions.
@@ -22,7 +22,7 @@
 ## How it works
 1. The client connects to the server via SMB (port 445 or 139).
 2. For an RPC call, the client first queries port 135 (Endpoint Mapper) to learn the actual port of the desired service.
-3. The server replies with a dynamic port — or the client uses a named pipe over SMB (`IPC$`) directly to skip this step.
+3. The server replies with a dynamic port or the client uses a named pipe over SMB (`IPC$`) directly to skip this step.
 4. The RPC call is executed over the established connection.
 
 ## Exploited weaknesses
