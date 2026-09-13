@@ -27,8 +27,13 @@ sudo responder -I eth0
 *(capture d'écran : `../../screenshots/02-credential-capture/01.png`)*
 
 
-### 3. Déclenchement de la requête côté victime
-Sur la machine Windows, tentative de résolution d'un partage inexistant :
+### 3. Trigger a name resolution request on the victim machine
+On the Windows machine (cmd):
+
+dir \partage-inexistant-test\
+
+Windows fails DNS resolution, falls back to LLMNR/NBT-NS broadcast —
+Responder intercepts and replies, capturing the NTLMv2 challenge/response.
 
 ### 4. Capture du hash NTLMv2
 *(capture d'écran : `../../screenshots/02-credential-capture/02.png`)*
@@ -36,7 +41,7 @@ Sur la machine Windows, tentative de résolution d'un partage inexistant :
 Responder intercepte la requête LLMNR/mDNS et capture plusieurs hashs NTLMv2 pour le compte `Administrator` (un nouveau hash à chaque tentative, car le challenge change).
 ## Résultat
 Ce qu'on obtient à l'issue de l'attaque (hash, ticket, accès, credentials...).
-
+Saved automatically in `/usr/share/responder/logs/`
 ### 5. Cassage hors ligne avec Hashcat
 
 ```
@@ -45,12 +50,19 @@ hashcat -m 5600 hash.txt passlist.txt (mon propre liste)
 hashcat -m 5600 hash.txt --show
 ```
 *(capture d'écran : `../../screenshots/02-credential-capture/03.png`)*
-## Résultat
-Obtention du mot de passe en clair du compte `Administrator` du domaine `BOB.local` — accès complet aux privilèges administratifs du domaine, sans jamais avoir eu d'identifiant de départ.
 
-## Détection & remédiation
-- **Détection** : surveiller le trafic LLMNR (UDP 5355) et NBT-NS (UDP 137) anormal sur le réseau — un outil comme Responder actif génère un volume de réponses inhabituel.
-- **Remédiation** : désactiver LLMNR (GPO) et NBT-NS (configuration réseau) si non nécessaires ; forcer une politique de mots de passe robuste pour résister au cracking même en cas de capture.
+## Result
+Plaintext password recovered for `BOB\Administrator` — full domain
+admin access obtained from a position of zero credentials, exploiting
+Windows fallback name resolution behavior.
 
-## Références
--
+## Detection & remediation
+- **Detection**: Monitor for abnormal LLMNR (UDP 5355) and NBT-NS
+  (UDP 137) traffic — a Responder-like tool generates unusual response
+  patterns
+- **Remediation**: Disable LLMNR via GPO; disable NBT-NS via network
+  adapter settings; enforce strong password policy to resist offline cracking
+
+## References
+- MITRE ATT&CK T1557.001 — LLMNR/NBT-NS Poisoning
+- https://www.thehacker.recipes/ad/movement/mitm-and-coerced-authentications/llmnr-nbtns-mdns-spoofing
